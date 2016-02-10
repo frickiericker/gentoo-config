@@ -1,0 +1,20 @@
+# Core programs
+app-admin/sudo		-sendmail
+
+# Libraries and platforms
+dev-libs/boost		mpi
+sci-libs/mkl		fftw int64 mpi
+dev-vcs/mpi		mpi-threads pbs threads
+sys-cluster/torque	cpusets munge server
+dev-python/matplotlib	cairo latex
+
+# Compilers and development utilities
+dev-lang/R		cairo perl
+dev-python/ipython	matplotlib notebook
+sys-devel/gcc		cilk graphite
+
+# Misc. applications
+app-editors/vim		perl python ruby vim-pager
+dev-vcs/subversion	perl python ruby
+dev-vcs/git		cgi subversion
+media-gfx/imagemagick	fftw graphviz
