@@ -103,7 +103,7 @@ phase1_initialize_disk() {
 }
 
 mkpart() {
-    parted -s -- /dev/${DISK} mkpart primary
+    parted -s -- /dev/${DISK} mkpart primary "$@"
 }
 
 #
