@@ -1,5 +1,5 @@
-#!/bin/sh -efu
-set -efu
+#!/bin/sh -efux
+set -efux
 export LANG=C LC_ALL=C
 
 MIRROR='http://ftp.jaist.ac.jp/pub/Linux/Gentoo'
@@ -235,9 +235,14 @@ phase2_install_world() {
 # Emerges kernel sources, launches menuconfig, and builds kenrnel.
 #
 phase2_install_kernel() {
+    # Use installer's kernel configuration (plus systemd support)
+    kernconf='/root/kernel.conf'
+    zcat /proc/config.gz > "${ROOT}${kernconf}"
+    echo 'CONFIG_GENTOO_LINUX_INIT_SYSTEMD=y' >> "${ROOT}${kernconf}"
+    #
     chroot "${ROOT}" emerge sys-kernel/gentoo-sources
     chroot "${ROOT}" emerge sys-kernel/genkernel-next
-    chroot "${ROOT}" genkernel --menuconfig --makeopts="-j ${NJOBS}" all
+    chroot "${ROOT}" genkernel --kernel-config="${kernconf}" --makeopts="-j ${NJOBS}" all
 }
 
 #
