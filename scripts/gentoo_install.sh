@@ -83,8 +83,7 @@ phase1_adjust_time() {
 }
 
 #
-# Sets up GPT partition table and filesystems on ${DISK}. The partition table
-# layout is as follows:
+# Sets up GPT partition table on ${DISK} as follows:
 #
 #   ${DISK}1    BIOS GRUB partition (3 MiB)
 #   ${DISK}2    Boot partition (${BOOTSIZE} MiB)
