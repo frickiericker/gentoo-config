@@ -6,6 +6,7 @@ MIRROR='http://ftp.jaist.ac.jp/pub/Linux/Gentoo'
 STAGE3_BASE="${MIRROR}/releases/amd64/autobuilds/20160204"
 STAGE3="${STAGE3_BASE}/stage3-amd64-20160204.tar.bz2"
 ROOT='/mnt/gentoo'
+INSTALLER_NTP=jp.pool.ntp.org
 
 CPU=haswell
 NJOBS=40
@@ -47,6 +48,7 @@ postinstall() {
 
 phase1_prepare_stage3() {
     phase1_setup_network
+    phase1_adjust_time
     phase1_initialize_disk
     phase1_mount_root
     phase1_extract_stage3
@@ -71,6 +73,13 @@ phase1_setup_network() {
         route add default gw ${GATEWAY}
     fi
     echo "nameserver ${DNS}" > /etc/resolv.conf
+}
+
+#
+# Adjusts system time for installation.
+#
+phase1_adjust_time() {
+    ntpdate ${INSTALLER_NTP}
 }
 
 #
