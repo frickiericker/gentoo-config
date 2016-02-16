@@ -319,10 +319,10 @@ phase2_install_locale() {
 #
 phase2_install_hostinfo() {
     # Set hostname
-    echo "${HOSTNAME}" > /etc/hostname
+    echo "${HOSTNAME}" > "${ROOT}/etc/hostname"
 
     # Register external IP address of this machine to the hosts database
-    cat > /etc/hosts << _END_
+    cat > "${ROOT}/etc/hosts" << _END_
 ${IPV4%/*}	${HOSTNAME} ${HOSTNAME}.${DOMAIN}
 128.0.0.1	localhost
 ::1		localhost
