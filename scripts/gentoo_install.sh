@@ -1,33 +1,64 @@
 #!/bin/sh -efux
+#------------------------------------------------------------------------------
+# Minimal installation script of Gentoo Linux with systemd support.
+#
+# == Note ==
+#
+# You must change UPPERCASE_VARIABLES defined in this script to match your
+# hardware and network.
+#
+# == Usage ==
+#
+# Change UPPERCASE_VARIABLES defined in this script to match your hardware and
+# network, and put it in a USB thumb drive or something. Then boot livecd with
+# nodhcp option. Copy the modified script in the /root of the livecd shell and
+# execute it as follows:
+#
+#   livecd ~ # sh gentoo_install.sh
+#
+# Then, reboot into the installed Gentoo Linux, login as root and issue
+#
+#   ~ # sh gentoo_install.sh postinstall
+#
+# to finish minimal installation. After this, you may want to rebuild kernel,
+# add USE flags to make.conf, install portages, enable services, etc. to
+# create your own Gentoo Linux environment.
+#------------------------------------------------------------------------------
 set -efux
 export LANG=C LC_ALL=C
 
+# Portage parameters
 MIRROR='http://ftp.jaist.ac.jp/pub/Linux/Gentoo'
-STAGE3_BASE="${MIRROR}/releases/amd64/autobuilds/20160204"
-STAGE3="${STAGE3_BASE}/stage3-amd64-20160204.tar.bz2"
-ROOT='/mnt/gentoo'
-INSTALLER_NTP=jp.pool.ntp.org
-
+PORTAGE_PROFILE='default/linux/amd64/13.0/systemd'
+PORTAGE_FEATURES='buildpkg'
 CPU=haswell
 NJOBS=40
 
-DISK=sda
+# Disk layout
 BOOTSIZE=128    # MiB
 SWAPSIZE=65536  # MiB
 
+# Network settings
 NETIF=enp5s0
 HOSTNAME=xeon01
 IPV4=192.168.100.161/24
 GATEWAY=192.168.100.1
 DNS=192.168.100.58
-
-PORTAGE_PROFILE='default/linux/amd64/13.0/systemd'
-PORTAGE_FEATURES='buildpkg'
 SYSTEMD_NETWORK_UNIT='50-labnet.network'
 
+# Locale settings
 KEYMAP=us
 TIMEZONE=Asia/Tokyo
 
+# Settings used in the installation process
+DISK=sda
+ROOT='/mnt/gentoo'
+STAGE3_BASE="${MIRROR}/releases/amd64/autobuilds/20160204"
+STAGE3="${STAGE3_BASE}/stage3-amd64-20160204.tar.bz2"
+INSTALLER_NTP=jp.pool.ntp.org
+
+#------------------------------------------------------------------------------
+# Entry Points
 #------------------------------------------------------------------------------
 
 install() {
