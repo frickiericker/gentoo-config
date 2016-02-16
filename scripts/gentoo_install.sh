@@ -250,7 +250,10 @@ phase2_install_kernel() {
     #
     chroot "${ROOT}" emerge sys-kernel/gentoo-sources
     chroot "${ROOT}" emerge sys-kernel/genkernel-next
-    chroot "${ROOT}" genkernel --kernel-config="${kernconf}" --makeopts="-j ${NJOBS}" all
+    #
+    chroot "${ROOT}" genkernel --kernel-config="${kernconf}" \
+                               --makeopts="-j ${NJOBS}"      \
+                               all
 }
 
 #
