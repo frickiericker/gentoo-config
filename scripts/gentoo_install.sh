@@ -279,7 +279,13 @@ phase2_install_kernel() {
     # Use installer's kernel configuration (plus systemd support)
     kernconf='/root/kernel.conf'
     zcat /proc/config.gz > "${ROOT}${kernconf}"
-    echo 'CONFIG_GENTOO_LINUX_INIT_SYSTEMD=y' >> "${ROOT}${kernconf}"
+    cat >> "${ROOT}${kernconf}" << _END_
+CONFIG_GENTOO_LINUX_INIT_SYSTEMD=y
+CONFIG_AUDIT=y
+CONFIG_CGROUPS=y
+CONFIG_FANOTIFY=y
+CONFIG_AUTOFS4_FS=y
+_END_
     #
     chroot "${ROOT}" emerge sys-kernel/gentoo-sources
     chroot "${ROOT}" emerge sys-kernel/genkernel-next
