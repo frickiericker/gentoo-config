@@ -346,15 +346,24 @@ _END_
 # Sets root password of the production system.
 #
 phase2_set_password() {
+    # TODO: automate with chpasswd -e
     chroot "${ROOT}" passwd
 }
 
+#
+# Copy this script into the production /root so that we can continue to phase
+# 3 postionstall after bootup.
+#
 phase2_install_installer() {
     cp "$0" "${ROOT}/root"
 }
 
 #------------------------------------------------------------------------------
 # Phase 3
+#
+# Phase 3 configures some systemd services and parameters in the production
+# environment. This postinstallation process is required since livecd does not
+# run systemd.
 #------------------------------------------------------------------------------
 
 phase3_postinstall() {
