@@ -180,6 +180,7 @@ phase1_install_configuration_files() {
     phase1_install_localegen
     phase1_install_fstab
     phase1_install_resolvconf
+    phase1_install_hostinfo
     phase1_install_portage_repos
 }
 
@@ -227,6 +228,18 @@ phase1_install_resolvconf() {
     cp /etc/resolv.conf "${ROOT}/etc/resolv.conf"
 }
 
+phase1_install_hostinfo() {
+    # Set hostname
+    echo "${HOSTNAME}" > "${ROOT}/etc/hostname"
+
+    # Register external IP address of this machine to the hosts database
+    cat > "${ROOT}/etc/hosts" << _END_
+${IPV4%/*}	${HOSTNAME} ${HOSTNAME}.${DOMAIN}
+128.0.0.1	localhost
+::1		localhost
+_END_
+}
+
 phase1_install_portage_repos() {
     # Use standard portage repository.
     mkdir "${ROOT}/etc/portage/repos.conf"
@@ -247,7 +260,6 @@ phase2_install_system() {
     phase2_install_kernel
     phase2_install_bootloader
     phase2_install_locale
-    phase2_install_hostinfo
     phase2_install_systemd_files
     phase2_set_password
     phase2_install_installer
@@ -312,21 +324,6 @@ phase2_install_bootloader() {
 phase2_install_locale() {
     chroot "${ROOT}" locale-gen
     chroot "${ROOT}" eselect locale set C
-}
-
-#
-# Installs hostname-related files.
-#
-phase2_install_hostinfo() {
-    # Set hostname
-    echo "${HOSTNAME}" > "${ROOT}/etc/hostname"
-
-    # Register external IP address of this machine to the hosts database
-    cat > "${ROOT}/etc/hosts" << _END_
-${IPV4%/*}	${HOSTNAME} ${HOSTNAME}.${DOMAIN}
-128.0.0.1	localhost
-::1		localhost
-_END_
 }
 
 #
