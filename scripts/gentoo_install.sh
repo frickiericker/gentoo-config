@@ -41,6 +41,7 @@ SWAPSIZE=65536  # MiB
 # Network settings
 NETIF=enp5s0
 HOSTNAME=xeon01
+DOMAIN=cse.example.com
 IPV4=192.168.100.161/24
 GATEWAY=192.168.100.1
 DNS=192.168.100.58
@@ -246,6 +247,7 @@ phase2_install_system() {
     phase2_install_kernel
     phase2_install_bootloader
     phase2_install_locale
+    phase2_install_hostinfo
     phase2_install_systemd_files
     phase2_set_password
     phase2_install_installer
@@ -307,6 +309,21 @@ phase2_install_locale() {
 }
 
 #
+# Installs hostname-related files.
+#
+phase2_install_hostinfo() {
+    # Set hostname
+    echo "${HOSTNAME}" > /etc/hostname
+
+    # Register external IP address of this machine to the hosts database
+    cat > /etc/hosts << _END_
+${IPV4%/*}	${HOSTNAME} ${HOSTNAME}.${DOMAIN}
+128.0.0.1	localhost
+::1		localhost
+_END_
+}
+
+#
 # Installs systemd-related files.
 #
 phase2_install_systemd_files() {
@@ -346,7 +363,6 @@ phase3_postinstall() {
 }
 
 phase3_configure_network() {
-    hostnamectl set-hostname ${HOSTNAME}
     systemctl enable systemd-networkd.service
     systemctl start systemd-networkd.service
 }
